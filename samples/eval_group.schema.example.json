@@ -1,0 +1,28 @@
+{
+  "dataset_id": "day04_v3_helpdesk_group_schema_example_only",
+  "dataset_role": "example",
+  "description": "Two schema examples only; they do not count toward the 10 original team cases.",
+  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
+  "cases": [
+    {
+      "id": "EX01_single_tool_call",
+      "phase": "B",
+      "query": "Kiểm tra phần cứng máy DT-031.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "DT-031", "check": "hardware"}}]},
+      "metadata": {"what_it_tests": "Ví dụ single-turn: chấm tool name và subset arguments."}
+    },
+    {
+      "id": "EX02_multi_no_tool",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra VPN production."},
+        {"role": "user", "content": "Thôi không cần kiểm tra nữa."},
+        {"role": "user", "content": "Chỉ cho biết bạn có những khả năng gì."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true},
+      "metadata": {"what_it_tests": "Ví dụ multi-turn: chỉ yêu cầu hiện tại được chấm."}
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "services": [
+    {"service": "vpn", "environment": "production", "status": "degraded", "incident": "Intermittent authentication failures for some Windows clients", "incident_id": "INC-1042", "affected_locations": ["Bangkok", "Remote"], "started_at": "2026-09-14T07:35:00+07:00", "last_updated": "2026-09-14T08:50:00+07:00", "workaround": "Retry once after synchronizing the device clock"},
+    {"service": "vpn", "environment": "staging", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:45:00+07:00", "workaround": null},
+    {"service": "email", "environment": "production", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:58:00+07:00", "workaround": null},
+    {"service": "email", "environment": "staging", "status": "maintenance", "incident": "Planned connector upgrade", "incident_id": "CHG-221", "affected_locations": ["All"], "started_at": "2026-09-14T08:00:00+07:00", "last_updated": "2026-09-14T08:40:00+07:00", "workaround": "Use the production tenant for approved test messages"},
+    {"service": "sso", "environment": "production", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:57:00+07:00", "workaround": null},
+    {"service": "sso", "environment": "staging", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:44:00+07:00", "workaround": null},
+    {"service": "wifi", "environment": "production", "status": "partial_outage", "incident": "Access points on floor 4 are unavailable", "incident_id": "INC-1045", "affected_locations": ["Bangkok floor 4"], "started_at": "2026-09-14T08:12:00+07:00", "last_updated": "2026-09-14T08:55:00+07:00", "workaround": "Use wired network or move to floor 3"},
+    {"service": "wifi", "environment": "staging", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:41:00+07:00", "workaround": null},
+    {"service": "printing", "environment": "production", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:52:00+07:00", "workaround": null},
+    {"service": "printing", "environment": "staging", "status": "operational", "incident": null, "incident_id": null, "affected_locations": [], "started_at": null, "last_updated": "2026-09-14T08:40:00+07:00", "workaround": null}
+  ]
+}

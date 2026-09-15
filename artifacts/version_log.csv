@@ -1,0 +1,2 @@
+version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,kien3007 (Lead),baseline,v0+p233ec2cecfdf+teb3e2243f237,233ec2cecfdf,eb3e2243f237,baseline,Đo lường hành vi chưa tối ưu của starter trước khi sửa prompt và tools,case_accuracy,,0.70,runs/v0_B_base_openai_20260914T184037608852.json

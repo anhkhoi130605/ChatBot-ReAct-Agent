@@ -1,0 +1,15 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "users": [
+    {"employee_id": "EMP-1001", "display_name": "An Nguyen", "department": "Finance", "office": "Bangkok", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": ["LT-204"]},
+    {"employee_id": "EMP-1002", "display_name": "Binh Tran", "department": "Sales", "office": "Bangkok", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": ["LT-240"]},
+    {"employee_id": "EMP-1003", "display_name": "Chi Le", "department": "Operations", "office": "Bangkok", "account_status": "locked", "mfa_status": "enrolled", "assigned_assets": ["DT-031"]},
+    {"employee_id": "EMP-1004", "display_name": "Dung Pham", "department": "Engineering", "office": "Remote", "account_status": "active", "mfa_status": "not_enrolled", "assigned_assets": []},
+    {"employee_id": "EMP-1005", "display_name": "Eva Lim", "department": "Legal", "office": "Singapore", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": ["LT-318"]},
+    {"employee_id": "EMP-1006", "display_name": "Giang Ho", "department": "Engineering", "office": "Remote", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": ["LT-411"]},
+    {"employee_id": "EMP-1007", "display_name": "Hana Park", "department": "Design", "office": "Bangkok", "account_status": "disabled", "mfa_status": "enrolled", "assigned_assets": ["DT-087"]},
+    {"employee_id": "EMP-1008", "display_name": "Ivan Wong", "department": "Executive", "office": "Singapore", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": ["MB-012"]},
+    {"employee_id": "EMP-1009", "display_name": "Khanh Vu", "department": "Support", "office": "Bangkok", "account_status": "password_expired", "mfa_status": "enrolled", "assigned_assets": []},
+    {"employee_id": "EMP-1010", "display_name": "Linh Do", "department": "Human Resources", "office": "Bangkok", "account_status": "active", "mfa_status": "enrolled", "assigned_assets": []}
+  ]
+}

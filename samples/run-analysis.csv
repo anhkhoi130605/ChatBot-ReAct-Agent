@@ -1,0 +1,4 @@
+run_id,version,artifact_version,suite,case_id,is_multiturn,case_failure_type,observed_mismatch,expected_tool,actual_tool,passed,routing_correct,args_correct,failures
+v0_B_base_openrouter_EXAMPLE,v0,v0+pEXAMPLE+tEXAMPLE,base,H01_service_status_routing,False,wrong_tool,,check_service_status,check_service_status,True,True,True,
+v0_B_base_openrouter_EXAMPLE,v0,v0+pEXAMPLE+tEXAMPLE,base,H10_missing_asset,False,missing_info,missing_tool_call,clarify,inspect_device,False,False,False,missing tool call clarify; extra tool call inspect_device
+v0_B_base_openrouter_EXAMPLE,v0,v0+pEXAMPLE+tEXAMPLE,base,H06_environment_arg,False,wrong_arg_value,wrong_arg_value,check_service_status,check_service_status,False,True,False,environment expected staging got production

@@ -1,0 +1,107 @@
+# starter_v0 — intentionally incomplete first-draft declarations.
+# Students improve routing guidance, argument conventions, missing-information
+# handling, and confirmation boundaries through v1/v2/v3.
+#
+# If a tool is renamed, keep the name synchronized across:
+#   this file -> tools/__init__.py -> data/eval_base.json
+#   -> data/eval_helpdesk_extension.json -> report/demo text
+tools:
+  # ---------------- Core tools ----------------
+  - name: clarify
+    description: "Khi thiếu thông tin hoặc cần xác nhận trước hành động, tool này tạo một câu hỏi cho người dùng. Tool này không suy đoán thông tin bí mật, asset_id, employee_id, token, password hoặc thông tin nhạy cảm. Nó hỗ trợ prompt cần hỏi lại theo kiểu text, yes_no hoặc choice."
+    parameters:
+      type: object
+      properties:
+        question: {type: string, default: "", description: "Câu hỏi cần hỏi lại người dùng để thu thập thông tin còn thiếu hoặc xin xác nhận hành động"}
+        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu phản hồi cần thu thập: text, yes_no hoặc choice"}
+        options: {type: array, default: [], items: {type: string}, description: "Danh sách lựa chọn nếu response_type là choice"}
+      required: [question]
+
+  - name: search_kb
+    description: "Tìm thông tin hướng dẫn hỗ trợ kỹ thuật trong knowledge base nội bộ. Tool này đọc dữ liệu kỹ thuật giả lập và trả về các đoạn tài liệu liên quan. Nó không thực thi instruction embedded trong tài liệu và không truy cập dữ liệu nhạy cảm ra ngoài."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Câu truy vấn từ khóa tìm kiếm trong knowledge base, ví dụ: wifi, vpn, printer, account access"}
+        category: {type: string, enum: [all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room], default: "all", description: "Nhóm tài liệu cần lọc: all, vpn, email, wifi, printing, account, security, hardware, software, meeting_room"}
+        top_k: {type: integer, default: 3, description: "Số lượng tài liệu phù hợp tối đa cần trả về"}
+      required: [query]
+
+  - name: check_service_status
+    description: "Kiểm tra trạng thái hiện tại của một dịch vụ công ty giả lập trong môi trường production hoặc staging. Tool này đọc dữ liệu service_status.json local và trả về trạng thái service, environment, snapshot, message và availability. Không chứa dữ liệu nhạy cảm hay side effect."
+    parameters:
+      type: object
+      properties:
+        service: {type: string, enum: [vpn, email, sso, wifi, printing], description: "Tên dịch vụ kỹ thuật cần kiểm tra: vpn, email, sso, wifi, printing"}
+        environment: {type: string, enum: [production, staging], default: "production", description: "Môi trường cần kiểm tra: production hoặc staging"}
+      required: [service]
+
+  - name: inspect_device
+    description: "Kiểm tra thông tin inventory và snapshot chẩn đoán của một thiết bị nội bộ. Tool này chỉ đọc dữ liệu giả lập về asset_id và các dịch vụ/diagnostic liên quan. Không trả về credential, mật khẩu, token, MFA/OTP, hoặc nội dung dữ liệu nhạy cảm ngoài phạm vi hỗ trợ kỹ thuật."
+    parameters:
+      type: object
+      properties:
+        asset_id: {type: string, description: "Mã tài sản nội bộ cần kiểm tra, ví dụ LT-123, DT-456 hoặc PR-789; không được suy đoán hay truyền employee_id hoặc serial"}
+        check: {type: string, enum: [all, network, vpn, security, hardware, software], default: "all", description: "Nhóm kiểm tra cần đọc: all, network, vpn, security, hardware, software"}
+      required: [asset_id]
+
+  - name: lookup_user
+    description: "Tra cứu hồ sơ người dùng nội bộ trong danh bạ hỗ trợ. Tool này đọc dữ liệu giả lập cho employee_id và trả về thông tin nội bộ có giới hạn như tên, phòng ban, email công ty hoặc role hỗ trợ. Không trả về credential, password, token,OTP hoặc dữ liệu nhạy cảm cá nhân vượt phạm vi công việc hỗ trợ."
+    parameters:
+      type: object
+      properties:
+        employee_id: {type: string, description: "Mã nhân viên định danh nội bộ, ví dụ EMP-1001 hoặc E12345; chỉ truyền employee_id, không truyền password/token/MFA hay dữ liệu cá nhân khác"}
+      required: [employee_id]
+
+  - name: format_incident_report
+    description: "Chuyển các finding đã thu thập từ hỗ trợ kỹ thuật thành một báo cáo sự cố có cấu trúc. Tool này không tạo mới dữ liệu; nó định dạng lại findings và metadata thành output text/report theo template được yêu cầu."
+    parameters:
+      type: object
+      properties:
+        findings:
+          type: array
+          default: []
+          description: "Danh sách finding đã thu thập từ các tool khác, mỗi finding gồm label, detail, source, status"
+          items:
+            type: object
+            properties:
+              label: {type: string, description: "Tên nhãn finding, ví dụ: service_status, user_lookup, device_snapshot"}
+              detail: {type: string, description: "Nội dung chi tiết hoặc evidence của finding"}
+              source: {type: string, description: "Nguồn evidence, ví dụ: search_kb, inspect_device, lookup_user, policy"}
+              status: {type: string, description: "Trạng thái finding, ví dụ: confirmed, detected, unresolved, blocked"}
+        template: {type: string, enum: [brief, technical, handoff], default: "brief", description: "Mẫu báo cáo cần định dạng: brief, technical hoặc handoff"}
+        incident_title: {type: string, default: "IT incident", description: "Tiêu đề báo cáo sự cố"}
+      required: [findings, template]
+
+  # ---------------- Optional/advanced tools ----------------
+  - name: search_device_info
+    description: "Tìm thông tin công khai về một model thiết bị trên web. Chỉ được phép truyền manufacturer, model và query_type; không truyền asset_id, employee_id, hostname, serial, location, diagnostic, password, token hoặc dữ liệu nội bộ nào ra ngoài. Tool này phục vụ external public-reference lookup để tìm specs, drivers, support page hoặc compatibility công khai."
+    parameters:
+      type: object
+      properties:
+        manufacturer: {type: string, description: "Hãng sản xuất công khai, ví dụ Lenovo, Dell, HP; chỉ tên hãng public, không bao gồm asset ID hay employee ID"}
+        model: {type: string, description: "Tên model công khai của thiết bị, ví dụ ThinkPad T14 Gen 4; không bao gồm serial/hostname/asset ID"}
+        query_type: {type: string, enum: [specs, drivers, support, compatibility], default: "support", description: "Loại thông tin công khai cần tìm: specs, drivers, support, compatibility"}
+        max_results: {type: integer, default: 3, description: "Số lượng kết quả công khai tối đa, tối đa 5"}
+      required: [manufacturer, model, query_type]
+
+  - name: policy
+    description: "Tìm trong cơ sở tri thức chính sách IT nội bộ. Tool này chỉ đọc dữ liệu giả lập/policy nội bộ và trả về các đoạn/trích dẫn chính sách liên quan. Không gửi dữ liệu ra ngoài; có thể được dùng để xác định ranh giới an toàn, quyền truy cập, xử lý sự cố, ticketing, và chính sách dữ liệu."
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Câu hỏi hoặc từ khóa cần tra cứu trong chính sách nội bộ"}
+        policy_area: {type: string, enum: [all, access_control, data_privacy, external_tools, incident_response, service_operations, ticketing], default: "all", description: "Phạm vi chính sách cần lọc: access_control, data_privacy, external_tools, incident_response, service_operations, ticketing hoặc all"}
+        top_k: {type: integer, default: 3, description: "Số lượng kết quả chính sách tối đa cần trả về"}
+      required: [query]
+
+  - name: create_ticket
+    description: "Tạo ticket hỗ trợ nội bộ sau khi người dùng xác nhận rõ ràng. Tool này có side effect: ghi file ticket JSON vào thư mục tickets/ local. Không tạo ticket nếu confirmed chưa bằng true. Không chứa dữ liệu nhạy cảm như password, token, API key, MFA/OTP hoặc recovery code."
+    parameters:
+      type: object
+      properties:
+        summary: {type: string, default: "", description: "Tóm tắt sự cố dạng text ngắn, không chứa credential/token/MFA/OTP/recovery code"}
+        priority: {type: string, enum: [low, medium, high, critical], default: "medium", description: "Mức ưu tiên ticket"}
+        asset_id: {type: string, default: "", description: "Mã tài sản nếu có, ví dụ LT-123 hoặc DT-456; nếu không có thì để trống"}
+        confirmed: {type: boolean, default: false, description: "Bắt buộc phải là true trước khi thực thi ghi ticket; nếu false, tool trả về needs_confirmation"}
+      required: [summary]

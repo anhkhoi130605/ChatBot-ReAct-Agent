@@ -1,0 +1,10 @@
+# Live model provider SDKs (install the one you use):
+openai>=1.0.0
+anthropic>=0.34.0
+google-genai>=0.8.0
+# Local helpdesk tools and declarations:
+PyYAML>=6.0
+# Optional external device search:
+requests>=2.31.0
+# Web UI:
+streamlit>=1.30.0

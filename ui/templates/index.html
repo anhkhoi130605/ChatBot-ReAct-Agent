@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IT Helpdesk Agent — Northstar Labs</title>
+  <meta name="description" content="IT Helpdesk AI Agent with tool call tracing for Northstar Labs internal service desk." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-icon">🖥️</span>
+        <div>
+          <div class="logo-title">IT Helpdesk</div>
+          <div class="logo-sub">Northstar Labs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="artifact-card">
+      <div class="artifact-label">Artifact Version</div>
+      <div class="artifact-version" id="artifact-version">{{ artifact_version }}</div>
+      <div class="artifact-hashes">
+        <span class="hash-badge prompt-badge" title="system_prompt.md hash">P: <code id="prompt-hash">{{ prompt_hash }}</code></span>
+        <span class="hash-badge tools-badge" title="tools.yaml hash">T: <code id="tools-hash">{{ tools_hash }}</code></span>
+      </div>
+      <div class="artifact-meta">
+        <span class="tag">{{ version_label }}</span>
+        <span class="tag model-tag">{{ model }}</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Session</div>
+      <div class="stat-row"><span>Turns</span><span class="stat-val" id="turn-count">0</span></div>
+      <div class="stat-row"><span>Tool calls</span><span class="stat-val" id="tool-call-count">0</span></div>
+      <div class="stat-row"><span>Status</span><span class="stat-val status-dot" id="session-status">Ready</span></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Transcript</div>
+      <div class="transcript-path" id="transcript-path">—</div>
+    </div>
+
+    <div class="sidebar-actions">
+      <button class="btn-reset" id="btn-reset" onclick="resetSession()">🔄 New Session</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+        <h1 class="topbar-title">IT Helpdesk Agent</h1>
+      </div>
+      <div class="topbar-right">
+        <span class="status-indicator" id="status-indicator">
+          <span class="dot dot-green"></span> Online
+        </span>
+      </div>
+    </header>
+
+    <!-- Chat area -->
+    <div class="chat-area" id="chat-area">
+      <div class="welcome-msg" id="welcome-msg">
+        <div class="welcome-icon">🤖</div>
+        <h2>Xin chào! Tôi là IT Helpdesk Agent.</h2>
+        <p>Tôi có thể giúp bạn kiểm tra dịch vụ, tra cứu thiết bị, tìm hướng dẫn IT và tạo ticket hỗ trợ.</p>
+        <div class="quick-prompts">
+          <button class="quick-btn" onclick="sendQuick('VPN của tôi bị lỗi, kiểm tra dịch vụ VPN')">🔌 Kiểm tra VPN</button>
+          <button class="quick-btn" onclick="sendQuick('Tìm hướng dẫn kết nối Wi-Fi công ty')">📶 Hướng dẫn Wi-Fi</button>
+          <button class="quick-btn" onclick="sendQuick('Kiểm tra thiết bị LT-318')">💻 Inspect thiết bị</button>
+          <button class="quick-btn" onclick="sendQuick('Chính sách dữ liệu nào được gửi ra external tool?')">📋 Xem Policy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="input-wrap">
+        <textarea id="user-input" placeholder="Nhập yêu cầu hỗ trợ IT..." rows="1"
+          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+      <div class="input-footer">
+        <span id="input-hint">Enter gửi · Shift+Enter xuống dòng</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- Tool detail modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span id="modal-title">Tool Details</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

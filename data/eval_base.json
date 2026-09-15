@@ -1,0 +1,276 @@
+{
+  "dataset_id": "day04_v3_helpdesk_base",
+  "dataset_role": "base",
+  "description": "Fixed core eval for the IT Helpdesk Agent. Do not edit prompts, expected behavior, or arguments. Only synchronize a tool name here if the team intentionally renames that tool everywhere.",
+  "cases": [
+    {
+      "id": "H01_service_status_routing", "phase": "B", "suite": "base",
+      "query": "Dịch vụ VPN production hiện có đang gặp sự cố không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}}]},
+      "metadata": {"skill": "route_shared_service", "difficulty": "easy", "what_it_tests": "Trạng thái dịch vụ dùng chung phải dùng status tool, không inspect một thiết bị."}
+    },
+    {
+      "id": "H02_device_routing", "phase": "B", "suite": "base",
+      "query": "Kiểm tra tổng thể laptop LT-204 giúp mình.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "all"}}]},
+      "metadata": {"skill": "route_device", "difficulty": "easy", "what_it_tests": "Một asset cụ thể phải dùng inspect_device."}
+    },
+    {
+      "id": "H03_kb_routing", "phase": "B", "suite": "base",
+      "query": "Tìm hướng dẫn cấu hình Outlook profile trên Windows 11.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "email"}}]},
+      "metadata": {"skill": "route_howto", "difficulty": "medium", "what_it_tests": "Yêu cầu hướng dẫn dùng knowledge base, không status hay device inspection."}
+    },
+    {
+      "id": "H04_user_routing", "phase": "B", "suite": "base",
+      "query": "Tra cứu tài khoản nhân viên EMP-1003 và thiết bị được cấp.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}]},
+      "metadata": {"skill": "route_employee", "difficulty": "easy", "what_it_tests": "Employee ID phải đi vào directory lookup."}
+    },
+    {
+      "id": "H05_device_check_arg", "phase": "B", "suite": "base",
+      "query": "Kiểm tra riêng kết nối VPN trên LT-204.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "vpn"}}]},
+      "metadata": {"skill": "device_check_arg", "difficulty": "medium", "what_it_tests": "Trích đúng asset ID và check=vpn."}
+    },
+    {
+      "id": "H06_environment_arg", "phase": "B", "suite": "base",
+      "query": "Email staging đang hoạt động bình thường chứ?",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
+      "metadata": {"skill": "environment_arg", "difficulty": "medium", "what_it_tests": "Không được đổi staging thành production mặc định."}
+    },
+    {
+      "id": "H07_format_report", "phase": "B", "suite": "base",
+      "query": "Trình bày các finding sau thành báo cáo kỹ thuật tên 'VPN LT-204': VPN AUTH_TIMEOUT; service VPN degraded.",
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "format_incident_report", "args": {"template": "technical", "incident_title": "VPN LT-204"}}]},
+      "metadata": {"skill": "format_existing_findings", "difficulty": "medium", "what_it_tests": "Đã có findings thì chỉ format, không gọi tool thu thập lại."}
+    },
+    {
+      "id": "H08_out_of_scope", "phase": "B", "suite": "base",
+      "query": "Gợi ý cho mình công thức nấu phở bò.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope", "difficulty": "easy", "what_it_tests": "Yêu cầu ngoài IT helpdesk không gọi tool."}
+    },
+    {
+      "id": "H09_meta_no_tool", "phase": "B", "suite": "base",
+      "query": "Bạn là gì và có thể hỗ trợ những việc nào?",
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "meta_no_tool", "difficulty": "easy", "what_it_tests": "Câu hỏi năng lực trả lời trực tiếp."}
+    },
+    {
+      "id": "H10_missing_asset", "phase": "B", "suite": "base",
+      "query": "Kiểm tra Wi-Fi trên laptop của mình giúp nhé.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_asset", "difficulty": "medium", "what_it_tests": "Thiếu asset ID phải hỏi, không đoán LT-204."}
+    },
+    {
+      "id": "H11_missing_employee", "phase": "B", "suite": "base",
+      "query": "Kiểm tra tài khoản của bạn nhân viên bên Sales giúp mình.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "text"}}]},
+      "metadata": {"skill": "clarify_employee", "difficulty": "medium", "what_it_tests": "Tên mơ hồ và thiếu employee ID phải hỏi lại."}
+    },
+    {
+      "id": "H12_confirm_before_ticket", "phase": "B", "suite": "base",
+      "query": "Tạo ticket mức high cho lỗi VPN trên LT-204 giúp mình.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_write", "difficulty": "medium", "what_it_tests": "Tạo ticket là write action, phải xác nhận trước."}
+    },
+    {
+      "id": "H13_parallel_status_and_device", "phase": "B", "suite": "base",
+      "query": "VPN trên LT-204 lỗi; kiểm tra cả trạng thái VPN production và máy đó.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
+        {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "vpn"}}
+      ]},
+      "metadata": {"skill": "parallel_tools", "difficulty": "hard", "what_it_tests": "Một yêu cầu cần cả shared status và device evidence; thứ tự không quan trọng."}
+    },
+    {
+      "id": "H14_out_of_scope_coding", "phase": "B", "suite": "base",
+      "query": "Viết một REST API quản lý bán hàng bằng Python.",
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "out_of_scope_coding", "difficulty": "easy", "what_it_tests": "Coding project ngoài helpdesk không gọi tool."}
+    },
+    {
+      "id": "M01_clarify_then_asset", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra Wi-Fi trên laptop của mình."},
+        {"role": "user", "content": "Mã máy là LT-240."},
+        {"role": "user", "content": "Chỉ kiểm tra network trên đúng máy đó."}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "network"}}]},
+      "metadata": {"skill": "multiturn_fill_asset", "difficulty": "hard", "what_it_tests": "Carry asset ID rồi dùng check mới nhất."}
+    },
+    {
+      "id": "M02_carry_environment", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "VPN staging có ổn không?"},
+        {"role": "user", "content": "Còn email thì sao?"},
+        {"role": "user", "content": "Chỉ kiểm tra email, vẫn là staging."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}]},
+      "metadata": {"skill": "multiturn_carry_environment", "difficulty": "hard", "what_it_tests": "Đổi service nhưng giữ environment từ lượt trước."}
+    },
+    {
+      "id": "M03_correct_asset", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra bảo mật máy LT-204."},
+        {"role": "user", "content": "À nhầm, máy LT-240."},
+        {"role": "user", "content": "Giữ check security nhé."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-240", "check": "security"}}]},
+      "metadata": {"skill": "multiturn_correction", "difficulty": "hard", "what_it_tests": "Thông tin sửa sau phải thắng thông tin cũ."}
+    },
+    {
+      "id": "M04_correct_employee", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tra cứu nhân viên EMP-1001."},
+        {"role": "user", "content": "Mình gõ nhầm, là EMP-1003."},
+        {"role": "user", "content": "Cho biết thiết bị được cấp của người đó."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1003"}}]},
+      "metadata": {"skill": "multiturn_employee_correction", "difficulty": "medium", "what_it_tests": "Employee ID được sửa ở lượt sau."}
+    },
+    {
+      "id": "M05_ticket_confirmation", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi VPN LT-204 mức medium."},
+        {"role": "user", "content": "Đổi mức ưu tiên thành high."},
+        {"role": "user", "content": "Hãy cho mình xem lại và hỏi xác nhận trước khi tạo."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "multiturn_confirmation", "difficulty": "hard", "what_it_tests": "Sau sửa priority vẫn phải dừng ở confirmation boundary."}
+    },
+    {
+      "id": "M06_switch_tool", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra trạng thái Wi-Fi production."},
+        {"role": "user", "content": "Thôi không xem status nữa, tìm hướng dẫn khắc phục Wi-Fi."},
+        {"role": "user", "content": "Chỉ cần bài hướng dẫn cho Windows."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_kb", "args": {"category": "wifi"}}]},
+      "metadata": {"skill": "multiturn_switch_tool", "difficulty": "hard", "what_it_tests": "Intent mới thay status bằng knowledge search."}
+    },
+    {
+      "id": "H15_compare_environments", "phase": "B", "suite": "base",
+      "query": "So sánh trạng thái email production và staging, đừng bỏ sót môi trường nào.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_service_status", "args": {"service": "email", "environment": "production"}},
+        {"name": "check_service_status", "args": {"service": "email", "environment": "staging"}}
+      ]},
+      "metadata": {"skill": "duplicate_tool_parallel", "difficulty": "hard", "what_it_tests": "Cùng một tool phải được gọi hai lần với args khác nhau; thứ tự không quan trọng."}
+    },
+    {
+      "id": "H16_compare_two_assets", "phase": "B", "suite": "base",
+      "query": "So sánh hardware snapshot của LT-204 và DT-031.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "hardware"}},
+        {"name": "inspect_device", "args": {"asset_id": "DT-031", "check": "hardware"}}
+      ]},
+      "metadata": {"skill": "multiple_assets", "difficulty": "hard", "what_it_tests": "Không được gộp hai asset IDs vào một argument hoặc chỉ kiểm tra một máy."}
+    },
+    {
+      "id": "H17_triage_with_three_sources", "phase": "B", "suite": "base",
+      "query": "VPN trên LT-318 sắp hết certificate; kiểm tra máy, status VPN production và tìm hướng dẫn VPN macOS.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}},
+        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
+        {"name": "search_kb", "args": {"category": "vpn"}}
+      ]},
+      "metadata": {"skill": "three_source_triage", "difficulty": "hard", "what_it_tests": "Một request rõ ràng cần ba nguồn; baseline one-tool rule sẽ làm fail."}
+    },
+    {
+      "id": "H18_user_and_asset", "phase": "B", "suite": "base",
+      "query": "Tra tài khoản EMP-1007 và kiểm tra security của máy DT-087 được nêu trong yêu cầu này.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "lookup_user", "args": {"employee_id": "EMP-1007"}},
+        {"name": "inspect_device", "args": {"asset_id": "DT-087", "check": "security"}}
+      ]},
+      "metadata": {"skill": "user_asset_parallel", "difficulty": "hard", "what_it_tests": "Directory record và device diagnostic là hai nguồn riêng."}
+    },
+    {
+      "id": "H19_ambiguous_environment", "phase": "B", "suite": "base",
+      "query": "Kiểm tra email ở môi trường demo của team QA.",
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "choice", "options": ["production", "staging"]}}]},
+      "metadata": {"skill": "clarify_environment", "difficulty": "hard", "what_it_tests": "Demo không map chắc chắn sang enum; phải hỏi production hay staging."}
+    },
+    {
+      "id": "H20_format_without_refetch", "phase": "B", "suite": "base",
+      "query": "Đã có findings: DT-087 packet loss 12%, DIMM B1 lỗi. Chỉ format thành handoff report tên 'DT-087 hardware'; không kiểm tra lại.",
+      "failure_type": "unnecessary_tool",
+      "expect": {"tool_calls": [{"name": "format_incident_report", "args": {"template": "handoff", "incident_title": "DT-087 hardware"}}]},
+      "metadata": {"skill": "format_only_boundary", "difficulty": "hard", "what_it_tests": "Tôn trọng 'không kiểm tra lại'; extra inspect call phải fail."}
+    },
+    {
+      "id": "M07_cancel_previous_action", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tạo ticket lỗi máy in PR-404."},
+        {"role": "user", "content": "Dừng lại, không tạo gì cả."},
+        {"role": "user", "content": "Chỉ nói bạn đã hiểu yêu cầu hủy."}
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {"no_tool": true, "behavior": "answer_without_tool"},
+      "metadata": {"skill": "multiturn_cancel", "difficulty": "hard", "what_it_tests": "Latest cancellation phải thắng action request cũ; không clarify và không create."}
+    },
+    {
+      "id": "M08_correct_then_parallel", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "VPN trên LT-204 đang lỗi."},
+        {"role": "user", "content": "À mã đúng là LT-318, máy macOS."},
+        {"role": "user", "content": "Kiểm tra cả VPN trên máy đó và VPN production."}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [
+        {"name": "inspect_device", "args": {"asset_id": "LT-318", "check": "vpn"}},
+        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}}
+      ]},
+      "metadata": {"skill": "multiturn_correction_parallel", "difficulty": "hard", "what_it_tests": "Carry corrected asset và tạo hai calls từ latest intent."}
+    },
+    {
+      "id": "M09_confirmation_invalidated", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Tôi xác nhận ticket lỗi Wi-Fi LT-240 mức medium."},
+        {"role": "user", "content": "Khoan, đổi thành critical và thêm nội dung nghi mất dữ liệu."},
+        {"role": "user", "content": "Hãy rà lại payload mới trước."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirmation_payload_change", "difficulty": "hard", "what_it_tests": "Confirmation cũ mất hiệu lực khi priority/summary thay đổi."}
+    },
+    {
+      "id": "M10_latest_intent_wins", "phase": "B", "suite": "base",
+      "turns": [
+        {"role": "user", "content": "Kiểm tra hardware máy DT-031."},
+        {"role": "user", "content": "Không cần kiểm tra máy nữa."},
+        {"role": "user", "content": "Chỉ tra trạng thái tài khoản EMP-1009."}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "lookup_user", "args": {"employee_id": "EMP-1009"}}]},
+      "metadata": {"skill": "latest_intent_replacement", "difficulty": "hard", "what_it_tests": "Không gọi stale inspect_device từ turn đầu."}
+    }
+  ]
+}

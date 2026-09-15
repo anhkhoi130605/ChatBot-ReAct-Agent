@@ -1,0 +1,5 @@
+version,author,changed_artifact,artifact_version,prompt_hash,tools_hash,reason,hypothesis,metric_name,metric_before,metric_after,run_file
+v0,team,baseline,v0+pa1b2c3d4e5f6+t1a2b3c4d5e6f,a1b2c3d4e5f6,1a2b3c4d5e6f,baseline,Đo hành vi chưa tối ưu trước khi sửa,case_accuracy,,0.65,runs/v0_B_base_openrouter_20260101T000000000000.json
+v1,team,system_prompt.md,v1+pb2c3d4e5f6a1+t1a2b3c4d5e6f,b2c3d4e5f6a1,1a2b3c4d5e6f,<điền lý do thay đổi>,<điền giả thuyết của nhóm>,case_accuracy,0.65,0.80,runs/v1_B_base_openrouter_20260101T010000000000.json
+v2,team,tools.yaml,v2+pb2c3d4e5f6a1+tc3d4e5f6a1b2,b2c3d4e5f6a1,c3d4e5f6a1b2,<điền lý do thay đổi>,<điền giả thuyết của nhóm>,case_accuracy,0.80,0.90,runs/v2_B_base_openrouter_20260101T020000000000.json
+v3,team,system_prompt.md,v3+pd4e5f6a1b2c3+tc3d4e5f6a1b2,d4e5f6a1b2c3,c3d4e5f6a1b2,<điền lý do thay đổi>,<điền giả thuyết của nhóm>,case_accuracy,0.90,0.95,runs/v3_B_base_openrouter_20260101T030000000000.json

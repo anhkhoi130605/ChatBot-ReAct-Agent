@@ -1,0 +1,42 @@
+{
+  "transcript_id": "example_helpdesk",
+  "version": "v3",
+  "artifact_version": "v3+pEXAMPLE+tEXAMPLE",
+  "prompt_hash": "EXAMPLE",
+  "tools_hash": "EXAMPLE",
+  "provider": "openrouter",
+  "model": "example-model",
+  "system_prompt": "artifacts/system_prompt.md",
+  "tools": "artifacts/tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-09-14T09:00:00",
+  "updated_at": "2026-09-14T09:01:00",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-14T09:00:00",
+      "user": "Kiểm tra riêng VPN trên LT-204.",
+      "status": "answered",
+      "assistant_text": "Thiết bị ghi nhận AUTH_TIMEOUT; cần đối chiếu status dịch vụ.",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [{"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "vpn"}}],
+          "tool_results": [{
+            "tool": "inspect_device",
+            "args": {"asset_id": "LT-204", "check": "vpn"},
+            "result": {"tool": "inspect_device", "asset_id": "LT-204", "diagnostics": {"vpn": "client 5.2.1; last connection failed with AUTH_TIMEOUT"}}
+          }]
+        }
+      ],
+      "tool_events": [{
+        "tool": "inspect_device",
+        "args": {"asset_id": "LT-204", "check": "vpn"},
+        "result": {"tool": "inspect_device", "asset_id": "LT-204", "diagnostics": {"vpn": "client 5.2.1; last connection failed with AUTH_TIMEOUT"}}
+      }],
+      "ended_at": "2026-09-14T09:01:00"
+    }
+  ]
+}

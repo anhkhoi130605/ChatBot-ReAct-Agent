@@ -1,0 +1,167 @@
+{
+  "snapshot_at": "2026-09-14T09:00:00+07:00",
+  "assets": [
+    {
+      "asset_id": "LT-204",
+      "manufacturer": "Lenovo",
+      "type": "laptop",
+      "model": "ThinkPad T14 Gen 4",
+      "os": "Windows 11 23H2",
+      "assigned_to": "EMP-1001",
+      "location": "Bangkok floor 3",
+      "purchase_date": "2024-02-12",
+      "warranty_until": "2027-02-11",
+      "diagnostics": {
+        "network": "online; latency 24 ms; DNS healthy",
+        "vpn": "client 5.2.1; last connection failed with AUTH_TIMEOUT",
+        "security": "disk encrypted; endpoint agent healthy; patches current",
+        "hardware": "battery health 86%; disk SMART healthy",
+        "software": "Outlook and VPN client installed; pending browser update"
+      }
+    },
+    {
+      "asset_id": "LT-240",
+      "manufacturer": "Dell",
+      "type": "laptop",
+      "model": "Dell Latitude 7440",
+      "os": "Windows 11 23H2",
+      "assigned_to": "EMP-1002",
+      "location": "Bangkok floor 4",
+      "purchase_date": "2024-05-08",
+      "warranty_until": "2027-05-07",
+      "diagnostics": {
+        "network": "offline on corporate Wi-Fi; wired network healthy",
+        "vpn": "client 5.2.1; no recent attempt",
+        "security": "disk encrypted; endpoint agent healthy; one critical patch pending",
+        "hardware": "battery health 91%; disk SMART healthy",
+        "software": "standard image; Wi-Fi driver 30 days behind approved version"
+      }
+    },
+    {
+      "asset_id": "DT-031",
+      "manufacturer": "HP",
+      "type": "desktop",
+      "model": "HP EliteDesk 800 G9",
+      "os": "Windows 11 23H2",
+      "assigned_to": "EMP-1003",
+      "location": "Bangkok floor 2",
+      "purchase_date": "2023-11-20",
+      "warranty_until": "2026-11-19",
+      "diagnostics": {
+        "network": "online; latency 3 ms; DNS healthy",
+        "vpn": "not installed on fixed office desktop",
+        "security": "disk encrypted; endpoint agent healthy; patches current",
+        "hardware": "memory test healthy; disk SMART warning",
+        "software": "Outlook installed; print spooler stopped"
+      }
+    },
+    {
+      "asset_id": "LT-318",
+      "manufacturer": "Apple",
+      "type": "laptop",
+      "model": "MacBook Pro 14-inch M3",
+      "os": "macOS 15.0",
+      "assigned_to": "EMP-1005",
+      "location": "Singapore floor 6",
+      "purchase_date": "2024-01-18",
+      "warranty_until": "2027-01-17",
+      "diagnostics": {
+        "network": "online; latency 38 ms; DNS healthy",
+        "vpn": "client 5.1.8; certificate expires in 5 days",
+        "security": "FileVault enabled; endpoint agent healthy; OS update pending",
+        "hardware": "battery health 94%; storage healthy",
+        "software": "approved productivity suite installed; VPN client one release behind"
+      }
+    },
+    {
+      "asset_id": "LT-411",
+      "manufacturer": "Lenovo",
+      "type": "laptop",
+      "model": "ThinkPad P1 Gen 6",
+      "os": "Ubuntu 24.04 LTS",
+      "assigned_to": "EMP-1006",
+      "location": "Remote - Vietnam",
+      "purchase_date": "2024-07-03",
+      "warranty_until": "2027-07-02",
+      "diagnostics": {
+        "network": "online; latency 71 ms; DNS fallback server active",
+        "vpn": "client 3.0.2; tunnel healthy",
+        "security": "disk encrypted; endpoint agent stale for 2 days; patches current",
+        "hardware": "battery health 89%; GPU diagnostics healthy",
+        "software": "kernel 6.8; approved engineering packages installed"
+      }
+    },
+    {
+      "asset_id": "DT-087",
+      "manufacturer": "Dell",
+      "type": "desktop",
+      "model": "OptiPlex 7010 Plus",
+      "os": "Windows 11 24H2",
+      "assigned_to": "EMP-1007",
+      "location": "Bangkok floor 4",
+      "purchase_date": "2025-01-06",
+      "warranty_until": "2028-01-05",
+      "diagnostics": {
+        "network": "online; packet loss 12% to default gateway",
+        "vpn": "not installed on fixed office desktop",
+        "security": "disk encrypted; endpoint agent healthy; patches current",
+        "hardware": "memory test reports intermittent error in DIMM B1",
+        "software": "standard image; BIOS update approved but not installed"
+      }
+    },
+    {
+      "asset_id": "MB-012",
+      "manufacturer": "Apple",
+      "type": "mobile",
+      "model": "iPhone 15",
+      "os": "iOS 18.0",
+      "assigned_to": "EMP-1008",
+      "location": "Singapore floor 6",
+      "purchase_date": "2024-03-22",
+      "warranty_until": "2026-03-21",
+      "diagnostics": {
+        "network": "corporate Wi-Fi profile installed; last sync 4 hours ago",
+        "vpn": "per-app VPN profile healthy",
+        "security": "device compliant; passcode present; remote wipe enabled",
+        "hardware": "battery maximum capacity 97%",
+        "software": "managed apps current; OS update available"
+      }
+    },
+    {
+      "asset_id": "PR-404",
+      "manufacturer": "HP",
+      "type": "printer",
+      "model": "Color LaserJet Enterprise M555dn",
+      "os": "FutureSmart 5.7",
+      "assigned_to": null,
+      "location": "Bangkok floor 4",
+      "purchase_date": "2023-08-14",
+      "warranty_until": "2026-08-13",
+      "diagnostics": {
+        "network": "offline; switch port reports link down",
+        "vpn": "not applicable",
+        "security": "admin password rotated; firmware current",
+        "hardware": "paper tray 2 sensor warning; toner levels above 40%",
+        "software": "print queue paused after three failed jobs"
+      }
+    },
+    {
+      "asset_id": "RM-501",
+      "manufacturer": "Logitech",
+      "type": "meeting_room",
+      "model": "Rally Bar",
+      "os": "CollabOS 1.13",
+      "assigned_to": null,
+      "location": "Bangkok room BKK-501",
+      "purchase_date": "2024-09-01",
+      "warranty_until": "2027-08-31",
+      "diagnostics": {
+        "network": "online; latency 5 ms; VLAN correct",
+        "vpn": "not applicable",
+        "security": "device certificate valid; firmware current",
+        "hardware": "camera healthy; right microphone pod disconnected",
+        "software": "Teams Rooms signed in; calendar sync delayed by 8 minutes"
+      }
+    }
+  ]
+}

@@ -1,0 +1,297 @@
+{
+  "dataset_id": "day04_v3_helpdesk_group",
+  "dataset_role": "group",
+  "description": "Original team evaluation cases for the IT Helpdesk Agent. This dataset contains exactly 10 cases: 5 single-turn and 5 multi-turn.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_sso_staging_status",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra trạng thái SSO staging hiện có hoạt động không?",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "service_status_argument",
+        "difficulty": "medium",
+        "what_it_tests": "Phải chọn đúng service SSO và giữ đúng môi trường staging."
+      }
+    },
+    {
+      "id": "G02_software_check",
+      "phase": "B",
+      "suite": "group",
+      "query": "Kiểm tra phần mềm đã cài trên máy LT-318 chưa.",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "software"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "device_check_argument",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu rõ ràng là kiểm tra software, không phải all hoặc network."
+      }
+    },
+    {
+      "id": "G03_printer_kb",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tìm hướng dẫn khắc phục máy in không nhận lệnh trên Windows.",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "search_kb",
+            "args": {
+              "category": "printing"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "knowledge_routing",
+        "difficulty": "medium",
+        "what_it_tests": "Yêu cầu hướng dẫn xử lý lỗi máy in phải dùng knowledge base, không dùng inspect_device."
+      }
+    },
+    {
+      "id": "G04_missing_employee_id",
+      "phase": "B",
+      "suite": "group",
+      "query": "Tra cứu tài khoản của nhân viên ở phòng Marketing cho mình.",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "clarify_missing_employee",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu employee ID hoặc tên cụ thể, nên hỏi lại thay vì đoán."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_poem",
+      "phase": "B",
+      "suite": "group",
+      "query": "Viết cho mình một bài thơ về mùa thu.",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "skill": "out_of_scope_non_it",
+        "difficulty": "easy",
+        "what_it_tests": "Yêu cầu ngoài phạm vi IT helpdesk không được gọi tool nào."
+      }
+    },
+    {
+      "id": "G06_asset_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra security trên máy LT-204."
+        },
+        {
+          "role": "user",
+          "content": "Xin lỗi, mã máy thực ra là LT-318."
+        },
+        {
+          "role": "user",
+          "content": "Giữ nguyên check security trên máy mới đó."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "security"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_asset_correction",
+        "difficulty": "hard",
+        "what_it_tests": "Thông tin mới nhất phải override thông tin cũ; không được giữ LT-204."
+      }
+    },
+    {
+      "id": "G07_change_service_keep_environment",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Kiểm tra VPN staging."
+        },
+        {
+          "role": "user",
+          "content": "Không, tôi muốn kiểm tra SSO thay vì VPN."
+        },
+        {
+          "role": "user",
+          "content": "Giữ nguyên môi trường staging, chỉ cần SSO thôi."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "sso",
+              "environment": "staging"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_service_update",
+        "difficulty": "hard",
+        "what_it_tests": "User đổi service nhưng vẫn giữ environment từ lượt trước."
+      }
+    },
+    {
+      "id": "G08_cancel_ticket",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tạo ticket lỗi Wi‑Fi trên LT-240."
+        },
+        {
+          "role": "user",
+          "content": "Thôi, không cần tạo gì cả."
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xác nhận rằng tôi đã hủy yêu cầu."
+        }
+      ],
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "skill": "multiturn_cancel_action",
+        "difficulty": "hard",
+        "what_it_tests": "Yêu cầu hủy mới nhất phải thắng hành động cũ; không clarify và không create_ticket."
+      }
+    },
+    {
+      "id": "G09_parallel_status_and_device",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "VPN trên LT-318 đang lỗi."
+        },
+        {
+          "role": "user",
+          "content": "Kiểm tra cả máy đó và trạng thái VPN production."
+        }
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "inspect_device",
+            "args": {
+              "asset_id": "LT-318",
+              "check": "vpn"
+            }
+          },
+          {
+            "name": "check_service_status",
+            "args": {
+              "service": "vpn",
+              "environment": "production"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "parallel_device_and_status",
+        "difficulty": "hard",
+        "what_it_tests": "Một yêu cầu có thể cần cả evidence device lẫn service; không được chọn chỉ một nguồn."
+      }
+    },
+    {
+      "id": "G10_format_override",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tôi có finding là SSO timeout trên LT-318."
+        },
+        {
+          "role": "user",
+          "content": "Format thành báo cáo kỹ thuật tên 'SSO LT-318'."
+        },
+        {
+          "role": "user",
+          "content": "Đổi tên báo cáo thành 'SSO incident LT-318', vẫn dùng template technical."
+        }
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format_incident_report",
+            "args": {
+              "template": "technical",
+              "incident_title": "SSO incident LT-318"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "skill": "multiturn_format_reissue",
+        "difficulty": "hard",
+        "what_it_tests": "Thông tin mới nhất trong hội thoại phải thay đổi title, đồng thời không gọi thêm tool nào khác."
+      }
+    }
+  ]
+}

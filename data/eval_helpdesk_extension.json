@@ -1,0 +1,90 @@
+{
+  "dataset_id": "day04_v3_helpdesk_extension",
+  "dataset_role": "extension",
+  "description": "Optional extension eval for policy retrieval and confirmed local ticket creation.",
+  "cases": [
+    {
+      "id": "E01_access_policy", "phase": "B", "suite": "extension",
+      "query": "Theo policy IT, có được hỏi người dùng cung cấp mã MFA để mở khóa tài khoản không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "access_control"}}]},
+      "metadata": {"skill": "access_policy", "difficulty": "medium", "what_it_tests": "Quy định account/MFA dùng policy, không lookup user."}
+    },
+    {
+      "id": "E02_privacy_policy", "phase": "B", "suite": "extension",
+      "query": "Policy công ty nói gì về việc đưa password và token vào transcript?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "data_privacy"}}]},
+      "metadata": {"skill": "privacy_policy", "difficulty": "medium", "what_it_tests": "Secret và transcript phải route sang data privacy policy."}
+    },
+    {
+      "id": "E03_incident_priority_policy", "phase": "B", "suite": "extension",
+      "query": "Theo policy, sự cố toàn công ty nên đặt priority nào?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "incident_response"}}]},
+      "metadata": {"skill": "incident_policy", "difficulty": "medium", "what_it_tests": "Câu hỏi phân loại ưu tiên dùng incident policy."}
+    },
+    {
+      "id": "E04_ticket_policy", "phase": "B", "suite": "extension",
+      "query": "Theo quy định nội bộ, tạo ticket có cần xác nhận của người dùng không?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "policy", "args": {"policy_area": "ticketing"}}]},
+      "metadata": {"skill": "ticket_policy", "difficulty": "medium", "what_it_tests": "Hỏi về quy tắc ticket dùng policy, chưa tạo ticket."}
+    },
+    {
+      "id": "E05_confirmed_ticket", "phase": "B", "suite": "extension",
+      "query": "Tôi xác nhận tạo ticket: VPN lỗi AUTH_TIMEOUT trên LT-204, priority high.",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"asset_id": "LT-204", "priority": "high", "confirmed": true}}]},
+      "metadata": {"skill": "confirmed_action", "difficulty": "hard", "what_it_tests": "Có xác nhận rõ và đủ chi tiết thì action tool được phép chạy."}
+    },
+    {
+      "id": "E06_service_plus_policy", "phase": "B", "suite": "extension",
+      "query": "Kiểm tra VPN production và tra policy về thay đổi cấu hình dịch vụ.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
+        {"name": "policy", "args": {"policy_area": "service_operations"}}
+      ]},
+      "metadata": {"skill": "parallel_status_policy", "difficulty": "hard", "what_it_tests": "Kết hợp dữ liệu vận hành và quy định nội bộ."}
+    },
+    {
+      "id": "E07_kb_plus_status", "phase": "B", "suite": "extension",
+      "query": "VPN Windows báo AUTH_TIMEOUT; kiểm tra status VPN production và tìm hướng dẫn xử lý.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "check_service_status", "args": {"service": "vpn", "environment": "production"}},
+        {"name": "search_kb", "args": {"category": "vpn"}}
+      ]},
+      "metadata": {"skill": "parallel_status_kb", "difficulty": "hard", "what_it_tests": "Kết hợp live-like status và hướng dẫn local."}
+    },
+    {
+      "id": "E08_confirm_after_revision", "phase": "B", "suite": "extension",
+      "turns": [
+        {"role": "user", "content": "Soạn ticket Wi-Fi LT-240 mức medium."},
+        {"role": "user", "content": "Đổi priority thành high."},
+        {"role": "user", "content": "Thông tin đúng rồi, tôi xác nhận tạo ticket."}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "create_ticket", "args": {"asset_id": "LT-240", "priority": "high", "confirmed": true}}]},
+      "metadata": {"skill": "multiturn_confirmed_action", "difficulty": "hard", "what_it_tests": "Carry nội dung sửa đổi và thực thi sau xác nhận rõ."}
+    },
+    {
+      "id": "E09_external_device_search", "phase": "B", "suite": "extension",
+      "query": "Tìm trang driver chính hãng cho Lenovo ThinkPad T14 Gen 4 trên web.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "search_device_info", "args": {"manufacturer": "Lenovo", "model": "ThinkPad T14 Gen 4", "query_type": "drivers"}}]},
+      "metadata": {"skill": "external_device_search", "difficulty": "medium", "what_it_tests": "Thông tin công khai về model thiết bị dùng external search, không dùng KB nội bộ."}
+    },
+    {
+      "id": "E10_internal_plus_external", "phase": "B", "suite": "extension",
+      "query": "Kiểm tra hardware của LT-204 và tìm thông số chính hãng cho Lenovo ThinkPad T14 Gen 4.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [
+        {"name": "inspect_device", "args": {"asset_id": "LT-204", "check": "hardware"}},
+        {"name": "search_device_info", "args": {"manufacturer": "Lenovo", "model": "ThinkPad T14 Gen 4", "query_type": "specs"}}
+      ]},
+      "metadata": {"skill": "internal_external_boundary", "difficulty": "hard", "what_it_tests": "Kết hợp dữ liệu asset nội bộ với public product search nhưng không gửi asset ID ra external tool."}
+    }
+  ]
+}
